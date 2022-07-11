@@ -1,0 +1,5 @@
+name: MinGameName
+version: 1.0.0
+author: qPexLegendary
+api: 4.0.0
+main: qpi\minigame\Main
