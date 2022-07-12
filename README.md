@@ -21,3 +21,8 @@
 - PMMP API >= 4.0.0
 - Наличие плагина FormConstructor (находится в папке lib)
 - Параметр `player.save-player.data=false` в конфиге pocketmine.yml (Рекомендуемо)
+
+## Использование
+
+В коде внутри проекта расставлены TODO метки, где вы можете вставлять логику вашей мини-игры. В phpStorm в разделе TODO можно увидеть все метки.
+![TODO-лист](./.github/minigame-template-todo.png)
