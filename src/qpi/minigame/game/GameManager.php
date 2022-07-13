@@ -8,8 +8,6 @@ use pocketmine\utils\SingletonTrait;
 class GameManager {
     use SingletonTrait;
 
-    private static int $freeId = 0;
-
     private array $games = [];
     private array $lobbies = [];
     private array $officialLobbies = [];
@@ -22,7 +20,7 @@ class GameManager {
 
     public function createNewLobby(Player $player, bool $custom): void {
         $game = new Game($custom? -1 : 10, $custom);
-        $lobbyId = $this->generateLobbyId($custom);
+        $lobbyId = $this->generateLobbyId();
         $lobby = new Lobby($lobbyId, $custom, $game);
         $this->lobbies[$lobbyId] = $lobby;
         $this->joinToLobby($player, $lobbyId);
@@ -113,14 +111,11 @@ class GameManager {
         }
     }
 
-    private function generateLobbyId(bool $custom): string {
-        if ($custom) {
-            while (true) {
-                $result = mt_rand(1000000, 9999999);
-                if (!isset($this->lobbies[(string) $result])) return (string) $result;
-            }
+    private function generateLobbyId(): string {
+        while (true) {
+            $result = mt_rand(1000000, 9999999);
+            if (!isset($this->lobbies[(string) $result])) return (string) $result;
         }
-        return (string) self::$freeId++;
     }
 
     public function getLastEnteredGame(Player $player): ?Game {
