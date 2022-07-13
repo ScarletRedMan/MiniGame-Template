@@ -1,10 +1,12 @@
 <?php
 
-namespace qpi\minigame\game;
+namespace qpi\minigame\lobby;
 
 use pocketmine\player\Player;
+use qpi\minigame\game\Game;
+use qpi\minigame\game\GameManager;
 
-class Lobby {
+class WaitingLobby {
 
     public const STATUS_WAITING = 0;
     public const STATUS_PREPARING = 1;

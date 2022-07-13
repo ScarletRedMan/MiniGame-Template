@@ -8,7 +8,7 @@ use pocketmine\command\Command;
 use pocketmine\command\CommandSender;
 use pocketmine\player\Player;
 use qpi\minigame\game\GameManager;
-use qpi\minigame\game\Lobby;
+use qpi\minigame\lobby\WaitingLobby;
 
 class LobbyCommand extends Command {
 
@@ -33,7 +33,7 @@ class LobbyCommand extends Command {
         $this->sendUserForm($sender, $gameManager->getLobbyByPlayer($sender));
     }
 
-    private function sendAdminForm(Player $player, Lobby $lobby): void {
+    private function sendAdminForm(Player $player, WaitingLobby $lobby): void {
         $form = new CustomForm(function(Player $player, array $data) use($lobby) {
             //TODO: Применение настроек лобби
         });
@@ -45,7 +45,7 @@ class LobbyCommand extends Command {
         $form->sendToPlayer($player);
     }
 
-    private function sendUserForm(Player $player, Lobby $lobby): void {
+    private function sendUserForm(Player $player, WaitingLobby $lobby): void {
         $form = new SimpleForm();
         $form->setTitle("Просмотр информации о лобби");
 
@@ -57,7 +57,7 @@ class LobbyCommand extends Command {
             });
 
             $form->addButton("Начать игру", SimpleForm::IMAGE_TYPE_PATH, "", function(Player $player) use($lobby) {
-                if ($lobby->getStatus() !== Lobby::STATUS_WAITING) {
+                if ($lobby->getStatus() !== WaitingLobby::STATUS_WAITING) {
                     $player->sendMessage("§cВы уже начали игру.");
                     return;
                 }

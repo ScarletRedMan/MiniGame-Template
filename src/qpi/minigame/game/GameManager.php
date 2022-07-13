@@ -4,6 +4,7 @@ namespace qpi\minigame\game;
 
 use pocketmine\player\Player;
 use pocketmine\utils\SingletonTrait;
+use qpi\minigame\lobby\WaitingLobby;
 
 class GameManager {
     use SingletonTrait;
@@ -21,7 +22,7 @@ class GameManager {
     public function createNewLobby(Player $player, bool $custom): void {
         $game = new Game($custom? -1 : 10, $custom);
         $lobbyId = $this->generateLobbyId();
-        $lobby = new Lobby($lobbyId, $custom, $game);
+        $lobby = new WaitingLobby($lobbyId, $custom, $game);
         $this->lobbies[$lobbyId] = $lobby;
         $this->joinToLobby($player, $lobbyId);
         if ($custom) $lobby->setOwner($player);
@@ -30,7 +31,7 @@ class GameManager {
 
     public function pickLobby(Player $player): void {
         foreach ($this->officialLobbies as $lobby) {
-            if ($lobby->getStatus() !== Lobby::STATUS_WAITING) continue;
+            if ($lobby->getStatus() !== WaitingLobby::STATUS_WAITING) continue;
 
             $this->joinToLobby($player, $lobby->getId());
             return;
@@ -39,7 +40,7 @@ class GameManager {
         $this->createNewLobby($player, false);
     }
 
-    public function findLobby(string $lobbyId): ?Lobby {
+    public function findLobby(string $lobbyId): ?WaitingLobby {
         if (!isset($this->lobbies[$lobbyId])) return null;
         $lobby = $this->lobbies[$lobbyId];
         return $lobby->isCustom()? $lobby : null;
@@ -65,11 +66,11 @@ class GameManager {
         return isset($this->players[$player->getXuid()]);
     }
 
-    public function getLobbyByPlayer(Player $player): Lobby {
+    public function getLobbyByPlayer(Player $player): WaitingLobby {
         return $this->lobbies[$this->players[$player->getXuid()]];
     }
 
-    public function startGame(Lobby $lobby): void {
+    public function startGame(WaitingLobby $lobby): void {
         unset($this->lobbies[$lobby->getId()]);
         if (!$lobby->isCustom()) unset($this->officialLobbies[$lobby->getId()]);
 
@@ -113,7 +114,7 @@ class GameManager {
 
     private function generateLobbyId(): string {
         while (true) {
-            $result = mt_rand(1000000, 9999999);
+            $result = mt_rand(100000, 999999);
             if (!isset($this->lobbies[(string) $result])) return (string) $result;
         }
     }

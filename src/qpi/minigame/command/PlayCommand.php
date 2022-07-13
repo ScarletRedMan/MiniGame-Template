@@ -9,7 +9,7 @@ use pocketmine\command\Command;
 use pocketmine\command\CommandSender;
 use pocketmine\player\Player;
 use qpi\minigame\game\GameManager;
-use qpi\minigame\game\Lobby;
+use qpi\minigame\lobby\WaitingLobby;
 
 class PlayCommand extends Command {
 
@@ -73,7 +73,7 @@ class PlayCommand extends Command {
                 return;
             }
 
-            if ($lobby->getStatus() !== Lobby::STATUS_WAITING) {
+            if ($lobby->getStatus() !== WaitingLobby::STATUS_WAITING) {
                 $player->sendMessage("§cЛидер лобби уже начал игру.");
                 return;
             }
